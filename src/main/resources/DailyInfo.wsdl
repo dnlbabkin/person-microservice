@@ -1,11 +1,11 @@
 <wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/"
-        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
-        xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
-        xmlns:tns="http://web.cbr.ru/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-        xmlns:s="http://www.w3.org/2001/XMLSchema"
-        xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
-        xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
-        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://web.cbr.ru/">
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+                  xmlns:tns="http://web.cbr.ru/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:s="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://web.cbr.ru/">
     <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Веб сервис для получения ежедневных данных ver 11.01.2021</wsdl:documentation>
     <wsdl:types>
         <s:schema elementFormDefault="qualified" targetNamespace="http://web.cbr.ru/">
