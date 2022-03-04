@@ -1,6 +1,7 @@
 package com.example.personmicroservice.account;
 
 import com.example.personmicroservice.AllDataInfoXML;
+import com.example.personmicroservice.AllDataInfoXMLResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,10 @@ public class SoapClient {
 
     private WebServiceTemplate template;
 
-    public AllDataInfoXML getData (AllDataInfoXML request) {
+    public AllDataInfoXMLResponse getData (AllDataInfoXML request) {
         template = new WebServiceTemplate(marshaller);
 
-        AllDataInfoXML allDataInfoXML = (AllDataInfoXML) template.marshalSendAndReceive("http://www.cbr.ru/", request);
+        AllDataInfoXMLResponse allDataInfoXML = (AllDataInfoXMLResponse) template.marshalSendAndReceive("http://danil-System-Product-Name:8088/mockDailyInfoSoap/", request);
 
         return allDataInfoXML;
     }
