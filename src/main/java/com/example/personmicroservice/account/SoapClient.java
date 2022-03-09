@@ -7,6 +7,10 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
+import javax.xml.bind.JAXBElement;
+import javax.xml.transform.stream.StreamSource;
+import java.io.InputStream;
+
 @Service
 public class SoapClient {
 
@@ -18,7 +22,8 @@ public class SoapClient {
     public AllDataInfoXMLResponse getData (AllDataInfoXML request) {
         template = new WebServiceTemplate(marshaller);
 
-        AllDataInfoXMLResponse allDataInfoXML = (AllDataInfoXMLResponse) template.marshalSendAndReceive("http://danil-System-Product-Name:8088/mockDailyInfoSoap/", request);
+        AllDataInfoXMLResponse allDataInfoXML = (AllDataInfoXMLResponse) template
+                .marshalSendAndReceive("http://danil-System-Product-Name:8088/mockDailyInfoSoap", request);
 
         return allDataInfoXML;
     }

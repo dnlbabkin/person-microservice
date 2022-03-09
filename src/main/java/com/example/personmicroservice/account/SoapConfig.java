@@ -1,20 +1,18 @@
 package com.example.personmicroservice.account;
 
-import com.example.personmicroservice.AllDataInfoXML;
-import com.example.personmicroservice.AllDataInfoXMLResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.web.client.RestTemplate;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import java.lang.reflect.Array;
 
 @Configuration
 public class SoapConfig {
 
     @Bean
-    public Jaxb2Marshaller marshaller () throws JAXBException {
+    public Jaxb2Marshaller marshaller () {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
         marshaller.setPackagesToScan("com.example.personmicroservice");
 
