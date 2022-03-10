@@ -6,6 +6,7 @@ import com.example.personmicroservice.AllDataInfoXMLResponse;
 import com.example.personmicroservice.model.USD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,7 +16,7 @@ public class SoapController {
     private SoapClient soapClient;
 
     @PostMapping(value = "/account", produces = {MediaType.APPLICATION_XML_VALUE})
-    public AllDataInfoXMLResponse invokeSoapClient(@RequestBody AllDataInfoXML request) {
+    public ResponseEntity<AllDataInfoXMLResponse> invokeSoapClient(@RequestBody AllDataInfoXML request) {
         return soapClient.getData(request);
     }
 
