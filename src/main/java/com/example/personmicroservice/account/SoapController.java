@@ -1,11 +1,9 @@
 package com.example.personmicroservice.account;
 
-
-import com.example.personmicroservice.AllDataInfoXMLResponse;
-import com.example.personmicroservice.model.USD;
+import com.example.personmicroservice.AllData;
+import com.example.personmicroservice.Envelope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.bind.JAXBException;
@@ -17,12 +15,17 @@ public class SoapController {
     private SoapClient soapClient;
 
     @PostMapping(value = "/account", produces = {MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<AllDataInfoXMLResponse> invokeSoapClient(@RequestBody String request) throws JAXBException {
-        return soapClient.getData(request);
+    public Envelope invokeSoapClient() throws JAXBException {
+        Envelope env = soapClient.getData();
+        env.getBody().getAllDataInfoXMLResponse().getAllDataInfoXMLResult()
+                .getContent().get(0);
+
+        return env;
     }
 
-    @GetMapping(value = "/account", produces = {MediaType.APPLICATION_XML_VALUE})
-    public USD result(USD usd){
-        return usd;
+    @GetMapping(value = "/account/USD", produces = {MediaType.APPLICATION_XML_VALUE})
+    public String returnUSD() throws JAXBException {
+        AllData allData = new AllData();
+        return allData.getMainIndicatorsVR().getCurrency().getUSD().getCurs();
     }
 }

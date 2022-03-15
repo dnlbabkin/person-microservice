@@ -1,10 +1,8 @@
 package com.example.personmicroservice.account;
 
 import com.example.personmicroservice.AllDataInfoXML;
-import com.example.personmicroservice.AllDataInfoXMLResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.personmicroservice.Envelope;
 import org.springframework.http.*;
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,7 +10,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collections;
@@ -25,19 +22,22 @@ public class SoapClient {
 
     private static final String url = "http://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx";
 
-    public ResponseEntity<AllDataInfoXMLResponse> getData (String request) throws JAXBException {
+    public Envelope getData () throws JAXBException {
         template = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_XML);
         headers.setAccept(Collections.singletonList(MediaType.TEXT_XML));
 
-        AllDataInfoXML allDataInfoXML = new AllDataInfoXML();
+        Envelope envelope = new Envelope();
         StringWriter writer = new StringWriter();
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(AllDataInfoXML.class);
+        envelope.setBody(new Envelope.Body());
+        envelope.getBody().setAllDataInfoXML(new AllDataInfoXML());
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(Envelope.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.marshal(allDataInfoXML, writer);
+        marshaller.marshal(envelope, writer);
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity(writer.toString(), headers);
@@ -47,11 +47,11 @@ public class SoapClient {
 
         String responseXML = response.getBody();
 
-        JAXBContext context = JAXBContext.newInstance(AllDataInfoXMLResponse.class);
+        JAXBContext context = JAXBContext.newInstance(Envelope.class);
         Unmarshaller unmarshaller = context.createUnmarshaller();
 
-        AllDataInfoXMLResponse dataInfoXMLResponse = (AllDataInfoXMLResponse) unmarshaller.unmarshal(new StringReader(responseXML));
+        Envelope dataInfoXMLResponse = (Envelope) unmarshaller.unmarshal(new StringReader(responseXML));
 
-        return null;
+        return dataInfoXMLResponse;
     }
 }

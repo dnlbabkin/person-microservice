@@ -66,11 +66,11 @@
 			<version>2.1.1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-xml</artifactId>
-			<version>2.12.3</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.fasterxml.jackson.dataformat</groupId>-->
+<!--			<artifactId>jackson-dataformat-xml</artifactId>-->
+<!--			<version>2.12.3</version>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.jodd</groupId>
@@ -102,37 +102,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.glassfish.jaxb</groupId>
-			<artifactId>jaxb-runtime</artifactId>
-			<version>2.3.0</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.sun.codemodel/codemodel -->
-		<dependency>
-			<groupId>com.sun.codemodel</groupId>
-			<artifactId>codemodel</artifactId>
-			<version>2.6</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sun.activation</groupId>
-			<artifactId>jakarta.activation</artifactId>
-			<version>1.2.1</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.apache.maven/maven-plugin-api -->
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-plugin-api</artifactId>
-			<version>3.8.5</version>
 		</dependency>
 
 		<dependency>
@@ -162,32 +134,6 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-codegen-plugin</artifactId>
-				<version>3.5.0</version>
-				<executions>
-					<execution>
-						<id>generate-sources</id>
-						<phase>generate-sources</phase>
-						<configuration>
-							<sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
-							<wsdlOptions>
-								<wsdlOption>
-									<wsdl>${basedir}/src/main/resources/DailyInfo.wsdl</wsdl>
-									<packagenames>
-										<packagename>com.example.personmicroservice</packagename>
-									</packagenames>
-								</wsdlOption>
-							</wsdlOptions>
-						</configuration>
-						<goals>
-							<goal>wsdl2java</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>
 				<version>2.5.0</version>
@@ -200,9 +146,9 @@
 						<configuration>
 							<packageName>com.example.personmicroservice</packageName>
 							<sources>
-								<source>src/main/resources/XSD</source>
+								<source>${basedir}/src/main/resources/xsd</source>
 							</sources>
-							<outputDirectory>${basedir}/target</outputDirectory>
+							<outputDirectory>${basedir}/target/generated-sources</outputDirectory>
 							<clearOutputDir>false</clearOutputDir>
 						</configuration>
 					</execution>
