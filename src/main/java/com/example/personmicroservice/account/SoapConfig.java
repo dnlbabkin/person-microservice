@@ -14,4 +14,14 @@ public class SoapConfig {
 
         return marshaller;
     }
+
+    @Bean
+    public SoapClient infoClient(Jaxb2Marshaller marshaller) {
+        SoapClient soapClient = new SoapClient();
+        soapClient.setDefaultUri("http://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx");
+        soapClient.setMarshaller(marshaller);
+        soapClient.setUnmarshaller(marshaller);
+
+        return soapClient;
+    }
 }

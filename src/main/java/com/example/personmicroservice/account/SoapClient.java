@@ -1,10 +1,15 @@
 package com.example.personmicroservice.account;
 
 import com.example.personmicroservice.AllDataInfoXML;
+import com.example.personmicroservice.AllDataInfoXMLResponse;
 import com.example.personmicroservice.Envelope;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.ws.client.core.WebServiceTemplate;
+import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -16,7 +21,12 @@ import java.util.Collections;
 import java.util.Map;
 
 @Service
-public class SoapClient {
+public class SoapClient extends WebServiceGatewaySupport {
+
+    @Autowired
+    private Jaxb2Marshaller marshaller;
+
+    private WebServiceTemplate webServiceTemplate;
 
     private RestTemplate template;
 
@@ -53,5 +63,19 @@ public class SoapClient {
         Envelope dataInfoXMLResponse = (Envelope) unmarshaller.unmarshal(new StringReader(responseXML));
 
         return dataInfoXMLResponse;
+    }
+
+    public AllDataInfoXMLResponse getResponse() {
+        Envelope request = new Envelope();
+        request.getBody().getAllDataInfoXMLResponse()
+                .getAllDataInfoXMLResult()
+                .getAllData().getMainIndicatorsVR()
+                .getCurrency().getUSD()
+                .getCurs();
+
+        AllDataInfoXMLResponse response = (AllDataInfoXMLResponse) getWebServiceTemplate()
+                .marshalSendAndReceive(request);
+
+        return response;
     }
 }
