@@ -1,5 +1,6 @@
-package com.example.personmicroservice.person_microservice;
+package com.example.personmicroservice.Repository;
 
+import com.example.personmicroservice.Entity.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

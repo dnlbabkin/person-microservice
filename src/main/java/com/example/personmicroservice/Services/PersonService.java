@@ -1,10 +1,9 @@
-package com.example.personmicroservice.person_microservice;
+package com.example.personmicroservice.Services;
 
-import com.example.personmicroservice.account.accountdata.Account;
-import com.example.personmicroservice.personaccount.PersonAccount;
+import com.example.personmicroservice.Entity.Person;
+import com.example.personmicroservice.Repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 public class PersonService {

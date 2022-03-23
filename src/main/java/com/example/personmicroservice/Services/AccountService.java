@@ -1,9 +1,9 @@
-package com.example.personmicroservice.account.accountdata;
+package com.example.personmicroservice.Services;
 
+import com.example.personmicroservice.Entity.Account;
+import com.example.personmicroservice.Repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 
 @Service
 public class AccountService {
@@ -14,4 +14,5 @@ public class AccountService {
     public Account saveUSD(Account account) {
         return accountRepository.save(account);
     }
+
 }

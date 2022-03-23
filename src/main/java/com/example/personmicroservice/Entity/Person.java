@@ -1,4 +1,4 @@
-package com.example.personmicroservice.person_microservice;
+package com.example.personmicroservice.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

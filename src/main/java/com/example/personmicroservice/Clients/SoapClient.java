@@ -1,4 +1,4 @@
-package com.example.personmicroservice.account;
+package com.example.personmicroservice.Clients;
 
 import com.example.personmicroservice.AllDataInfoXML;
 import com.example.personmicroservice.AllDataInfoXMLResponse;
@@ -63,19 +63,5 @@ public class SoapClient extends WebServiceGatewaySupport {
         Envelope dataInfoXMLResponse = (Envelope) unmarshaller.unmarshal(new StringReader(responseXML));
 
         return dataInfoXMLResponse;
-    }
-
-    public AllDataInfoXMLResponse getResponse() {
-        Envelope request = new Envelope();
-        request.getBody().getAllDataInfoXMLResponse()
-                .getAllDataInfoXMLResult()
-                .getAllData().getMainIndicatorsVR()
-                .getCurrency().getUSD()
-                .getCurs();
-
-        AllDataInfoXMLResponse response = (AllDataInfoXMLResponse) getWebServiceTemplate()
-                .marshalSendAndReceive(request);
-
-        return response;
     }
 }

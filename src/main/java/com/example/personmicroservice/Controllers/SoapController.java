@@ -1,11 +1,12 @@
-package com.example.personmicroservice.account;
+package com.example.personmicroservice.Controllers;
 
 import com.example.personmicroservice.Envelope;
-import com.example.personmicroservice.account.accountdata.Account;
-import com.example.personmicroservice.account.accountdata.AccountService;
+import com.example.personmicroservice.Clients.SoapClient;
+import com.example.personmicroservice.Entity.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import com.example.personmicroservice.Services.AccountService;
 
 import javax.xml.bind.JAXBException;
 

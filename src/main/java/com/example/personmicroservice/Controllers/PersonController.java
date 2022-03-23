@@ -1,5 +1,7 @@
-package com.example.personmicroservice.person_microservice;
+package com.example.personmicroservice.Controllers;
 
+import com.example.personmicroservice.Entity.Person;
+import com.example.personmicroservice.Services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

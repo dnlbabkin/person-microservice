@@ -1,5 +1,6 @@
-package com.example.personmicroservice.account;
+package com.example.personmicroservice.Configurations;
 
+import com.example.personmicroservice.Clients.SoapClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
