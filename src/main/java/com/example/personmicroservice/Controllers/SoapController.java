@@ -28,7 +28,7 @@ public class SoapController {
         return env;
     }
 
-    @GetMapping(value = "/account/USD", produces = {MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = "/account/USD/", produces = {MediaType.APPLICATION_XML_VALUE})
     public String getUSD() throws JAXBException {
         Envelope envelope = soapClient.getData();
 
