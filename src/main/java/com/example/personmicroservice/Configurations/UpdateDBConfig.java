@@ -23,12 +23,10 @@ public class UpdateDBConfig {
     @Autowired
     private SoapClient soapClient;
 
-    private final Logger logger = LoggerFactory.getLogger(UpdateDBConfig.class);
+    Logger logger = LoggerFactory.getLogger(UpdateDBConfig.class);
 
-    @Scheduled(fixedRateString = "${sample.schedule.string}", initialDelay = 1000)
+    @Scheduled(fixedRateString = "${sample.schedule.string}", initialDelayString = "${initialdelay.string}")
     public void updateDataBase() throws JAXBException {
-        logger.info("Start writing...");
-
         Account account = new Account();
         Envelope envelope = soapClient.getData();
 
@@ -37,8 +35,12 @@ public class UpdateDBConfig {
                 .getMainIndicatorsVR().getCurrency()
                 .getUSD().getCurs());
 
+        logger.info("Start writing Course: [" + account.getUsd()
+                + "] to Database. Entity[" + account + "]");
+
         accountRepository.save(account);
 
-        logger.info("Finish writing...");
+        logger.info("Finish writing Course: [" + account.getUsd()
+                + "] to Database. Entity[" + account + "]");
     }
 }
