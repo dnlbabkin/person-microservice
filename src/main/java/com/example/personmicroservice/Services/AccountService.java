@@ -12,18 +12,10 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
-//    @Autowired
-//    private UpdateDBConfig updateDBConfig;
+    @Autowired
+    private UpdateDBConfig updateDBConfig;
 
     public Account saveUSD(Account account) {
         return accountRepository.save(account);
-    }
-
-    public Account findUsdById(Integer id) {
-        return accountRepository.findUSDById(id);
-    }
-
-    public Account deleteUSD(Account account) {
-        return accountRepository.deleteAllUSD(account);
     }
 }
