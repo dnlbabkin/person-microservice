@@ -4,8 +4,7 @@ import com.example.personmicroservice.Clients.SoapClient;
 import com.example.personmicroservice.Entity.Account;
 import com.example.personmicroservice.Envelope;
 import com.example.personmicroservice.Repository.AccountRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -13,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.xml.bind.JAXBException;
 
+@Slf4j
 @EnableScheduling
 @Configuration
 public class UpdateDBConfig {
@@ -22,8 +22,6 @@ public class UpdateDBConfig {
 
     @Autowired
     private SoapClient soapClient;
-
-    Logger logger = LoggerFactory.getLogger(UpdateDBConfig.class);
 
     @Scheduled(fixedRateString = "${sample.schedule.string}", initialDelayString = "${initialdelay.string}")
     public void updateDataBase() throws JAXBException {
@@ -35,12 +33,9 @@ public class UpdateDBConfig {
                 .getMainIndicatorsVR().getCurrency()
                 .getUSD().getCurs());
 
-        logger.info("Start writing Course: [" + account.getUsd()
-                + "] to Database. Entity[" + account + "]");
-
         accountRepository.save(account);
 
-        logger.info("Finish writing Course: [" + account.getUsd()
+        log.info("Finish writing Course: [" + account.getUsd()
                 + "] to Database. Entity[" + account + "]");
     }
 }
