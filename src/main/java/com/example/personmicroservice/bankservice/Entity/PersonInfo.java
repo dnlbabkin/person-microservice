@@ -1,7 +1,5 @@
-package com.example.personmicroservice.Entity;
+package com.example.personmicroservice.bankservice.Entity;
 
-import com.example.personmicroservice.Entity.Person;
-import com.example.personmicroservice.Entity.PersonAccount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

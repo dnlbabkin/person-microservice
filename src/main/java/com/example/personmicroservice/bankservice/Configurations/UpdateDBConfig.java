@@ -1,9 +1,9 @@
-package com.example.personmicroservice.Configurations;
+package com.example.personmicroservice.bankservice.Configurations;
 
-import com.example.personmicroservice.Clients.SoapClient;
-import com.example.personmicroservice.Entity.Account;
+import com.example.personmicroservice.bankservice.Clients.SoapClient;
+import com.example.personmicroservice.bankservice.Entity.Account;
 import com.example.personmicroservice.Envelope;
-import com.example.personmicroservice.Repository.AccountRepository;
+import com.example.personmicroservice.bankservice.Repository.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

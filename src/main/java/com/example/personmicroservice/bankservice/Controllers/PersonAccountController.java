@@ -1,10 +1,10 @@
-package com.example.personmicroservice.Controllers;
+package com.example.personmicroservice.bankservice.Controllers;
 
 import com.example.personmicroservice.Envelope;
-import com.example.personmicroservice.Clients.SoapClient;
-import com.example.personmicroservice.Services.PersonService;
-import com.example.personmicroservice.Entity.PersonAccount;
-import com.example.personmicroservice.Services.PersonAccountService;
+import com.example.personmicroservice.bankservice.Clients.SoapClient;
+import com.example.personmicroservice.bankservice.Services.PersonService;
+import com.example.personmicroservice.bankservice.Entity.PersonAccount;
+import com.example.personmicroservice.bankservice.Services.PersonAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,7 +1,7 @@
-package com.example.personmicroservice.Controllers;
+package com.example.personmicroservice.bankservice.Controllers;
 
-import com.example.personmicroservice.Services.PersonAccountService;
-import com.example.personmicroservice.Entity.PersonInfo;
+import com.example.personmicroservice.bankservice.Services.PersonAccountService;
+import com.example.personmicroservice.bankservice.Entity.PersonInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

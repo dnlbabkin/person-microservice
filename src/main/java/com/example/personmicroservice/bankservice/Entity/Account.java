@@ -1,4 +1,4 @@
-package com.example.personmicroservice.Entity;
+package com.example.personmicroservice.bankservice.Entity;
 
 import com.example.personmicroservice.AllData;
 import com.example.personmicroservice.AllDataInfoXMLResponse;

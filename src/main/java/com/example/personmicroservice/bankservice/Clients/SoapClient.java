@@ -1,7 +1,6 @@
-package com.example.personmicroservice.Clients;
+package com.example.personmicroservice.bankservice.Clients;
 
 import com.example.personmicroservice.AllDataInfoXML;
-import com.example.personmicroservice.AllDataInfoXMLResponse;
 import com.example.personmicroservice.Envelope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;

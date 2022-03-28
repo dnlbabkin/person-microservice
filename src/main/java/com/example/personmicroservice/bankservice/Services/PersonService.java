@@ -1,7 +1,7 @@
-package com.example.personmicroservice.Services;
+package com.example.personmicroservice.bankservice.Services;
 
-import com.example.personmicroservice.Entity.Person;
-import com.example.personmicroservice.Repository.PersonRepository;
+import com.example.personmicroservice.bankservice.Entity.Person;
+import com.example.personmicroservice.bankservice.Repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
