@@ -1,21 +1,17 @@
 package com.example.personmicroservice.bankoperation.Repositories;
 
-import org.springframework.stereotype.Repository;
+import com.example.personmicroservice.bankoperation.Model.Transfer;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
-@Repository
-public class TransferRepository {
+public interface TransferRepository extends JpaRepository<Transfer, Long> {
 
-    private final Map<Integer, BigDecimal> storage = new HashMap(Map.of(1L, BigDecimal.class));
+    BigDecimal getBalanceById(Long account_number);
 
-    public BigDecimal getBalanceForId(Integer accountId) {
-        return storage.get(accountId);
-    }
+//    @Query()
+//    void saveBalance(Map<Integer, BigDecimal> balanceFrom);
 
-    public void save(Integer id, BigDecimal amount) {
-        storage.put(id, amount);
-    }
 }

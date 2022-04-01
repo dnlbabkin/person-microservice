@@ -21,22 +21,20 @@ public class PersonAccountService {
     private static final String URL = "http://localhost:8080/person-account/";
 
     public PersonAccount savePersonAccount(PersonAccount personAccount) {
+
         return personAccountRepository.save(personAccount);
     }
 
     public PersonInfo getPersonAccount(Integer personId) {
         RestTemplate restTemplate = new RestTemplate();
 
-        PersonInfo personInfo = new PersonInfo();
+
         Person person = personRepository.findPersonById(personId);
 
         PersonAccount personAccount = restTemplate
                 .getForObject(URL + person.getId(), PersonAccount.class);
 
-        personInfo.setPerson(person);
-        personInfo.setPersonAccount(personAccount);
-
-        return personInfo;
+        return new PersonInfo(person, personAccount);
     }
 
     public PersonAccount getAccountById(Integer id) {

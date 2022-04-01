@@ -1,11 +1,9 @@
 package com.example.personmicroservice.bankoperation.Service;
 
-import com.example.personmicroservice.bankoperation.Model.Transfer;
 import com.example.personmicroservice.bankoperation.Repositories.TransferRepository;
+import com.example.personmicroservice.bankoperation.Model.TransferRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 
 @Service
 public class TransferService {
@@ -13,47 +11,25 @@ public class TransferService {
     @Autowired
     private TransferRepository transferRepository;
 
-    public BigDecimal getBalance(Integer accountId) {
-        BigDecimal balance = transferRepository.getBalanceForId(accountId);
-
-        if(balance == null) {
-            throw new IllegalArgumentException();
-        }
-
-        return balance;
+    public void makeTransfer(TransferRequest transfer) {
+//        transfer.getFromAccount();
+//        transfer.getToAccount();
+//
+//        BigDecimal updateFrom = from.subtract(transfer.getAmount());
+//        BigDecimal updateTo = to.add(transfer.getAmount());
+//
+//        Map<Long, BigDecimal> balanceFrom = new HashMap<>();
+//        balanceFrom.put(transfer.getFromAccount(), updateFrom);
+//
+//        Map<Long, BigDecimal> balanceTo = new HashMap<>();
+//        balanceTo.put(transfer.getToAccount(), updateTo);
+//        TransferRequest t = new TransferRequest();
+//        transferRepository.getBalanceById(1)
+//        transferRepository.saveBalance(balanceTo);
     }
 
-    public BigDecimal addMoney(Integer to, BigDecimal amount) {
-        BigDecimal currentBalance = transferRepository.getBalanceForId(to);
-
-        if(currentBalance == null) {
-            transferRepository.save(to, amount);
-
-            return amount;
-        } else {
-            BigDecimal updatedBalance = currentBalance.add(amount);
-            transferRepository.save(to, updatedBalance);
-
-            return updatedBalance;
-        }
-    }
-
-    public void makeTransfer(Transfer transfer) {
-        BigDecimal fromBalance = transferRepository.getBalanceForId(transfer.getFrom());
-        BigDecimal toBalance = transferRepository.getBalanceForId(transfer.getTo());
-
-        if(fromBalance == null || toBalance == null) {
-            throw new IllegalArgumentException("no id's");
-        }
-
-        if(transfer.getAmount().compareTo(fromBalance) > 0){
-            throw new IllegalArgumentException("no money");
-        }
-
-        BigDecimal updatedFromBalance = fromBalance.subtract(transfer.getAmount());
-        BigDecimal updatedToBalance = toBalance.add(transfer.getAmount());
-
-        transferRepository.save(transfer.getFrom(), updatedFromBalance);
-        transferRepository.save(transfer.getTo(), updatedToBalance);
-    }
+//    public Transfer add(Integer to_account) {
+//        transferRepository.findById(to_account);
+//        return transferRepository.save(to_account);
+//    }
 }

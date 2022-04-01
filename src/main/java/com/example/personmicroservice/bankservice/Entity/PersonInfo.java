@@ -1,14 +1,9 @@
 package com.example.personmicroservice.bankservice.Entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Value
 public class PersonInfo {
-
-    private Person person;
-    private PersonAccount personAccount;
+    Person person;
+    PersonAccount personAccount;
 }

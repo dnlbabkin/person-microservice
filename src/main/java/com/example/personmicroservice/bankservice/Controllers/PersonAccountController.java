@@ -34,10 +34,13 @@ public class PersonAccountController {
                 .getMainIndicatorsVR().getCurrency()
                 .getUSD().getCurs();
 
-        BigDecimal result = account.getRUB().divide(usd, 2, RoundingMode.HALF_UP);
-        account.setUSD(result);
-
-        personAccountService.savePersonAccount(account);
+        if(account.getIncome().getCurrency().equals("rub")){
+            personAccountService.savePersonAccount(account);
+        } else if(account.getIncome().getCurrency().equals("usd")) {
+            BigDecimal result = account.getIncome().getAmount().divide(usd, 2, RoundingMode.HALF_UP);
+            account.getIncome().setAmount(result);
+            personAccountService.savePersonAccount(account);
+        }
 
         return account;
     }
