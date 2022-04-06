@@ -1,17 +1,18 @@
 package com.example.personmicroservice.bankoperation.Model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Getter
 @Table(name = "transfer")
 public class Transfer {
 
@@ -19,12 +20,7 @@ public class Transfer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer from_account;
-
-    private Integer to_account;
-
-    private String currency;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private BigDecimal amount;
+    String accountNumber;
+    String currency;
+    BigDecimal currentAmount;
 }

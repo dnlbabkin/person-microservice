@@ -1,17 +1,12 @@
 package com.example.personmicroservice.bankoperation.Repositories;
 
 import com.example.personmicroservice.bankoperation.Model.Transfer;
+import com.example.personmicroservice.bankservice.Entity.PersonAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
-import java.util.Map;
-
+@Repository
 public interface TransferRepository extends JpaRepository<Transfer, Long> {
 
-    BigDecimal getBalanceById(Long account_number);
-
-//    @Query()
-//    void saveBalance(Map<Integer, BigDecimal> balanceFrom);
-
+    Transfer findByAccountNumberEquals(String fromAccountNumber);
 }

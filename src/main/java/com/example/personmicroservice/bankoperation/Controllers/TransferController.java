@@ -1,6 +1,5 @@
 package com.example.personmicroservice.bankoperation.Controllers;
 
-import com.example.personmicroservice.bankoperation.Model.Transfer;
 import com.example.personmicroservice.bankoperation.Service.TransferService;
 import com.example.personmicroservice.bankoperation.Model.TransferRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +14,13 @@ public class TransferController {
     private TransferService transferService;
 
     @PostMapping(value = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public TransferRequest transfer(@RequestBody TransferRequest transfer) {
-        transfer.getFromAccount().getAccount();
+    public void transfer(@RequestBody TransferRequest transfer) {
 
-        return transfer;
+        transferService.makeTransfer(transfer);
     }
 
     @PostMapping("/add-account-number")
-    public Transfer addAccountNumber(@RequestBody Transfer transfer) {
+    public TransferRequest addAccountNumber(@RequestBody TransferRequest transfer) {
         return null;
     }
 }

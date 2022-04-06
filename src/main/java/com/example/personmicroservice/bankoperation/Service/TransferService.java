@@ -1,9 +1,13 @@
 package com.example.personmicroservice.bankoperation.Service;
 
+import com.example.personmicroservice.bankoperation.Model.Transfer;
 import com.example.personmicroservice.bankoperation.Repositories.TransferRepository;
 import com.example.personmicroservice.bankoperation.Model.TransferRequest;
+import com.example.personmicroservice.bankservice.Entity.PersonAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class TransferService {
@@ -12,24 +16,25 @@ public class TransferService {
     private TransferRepository transferRepository;
 
     public void makeTransfer(TransferRequest transfer) {
-//        transfer.getFromAccount();
-//        transfer.getToAccount();
-//
-//        BigDecimal updateFrom = from.subtract(transfer.getAmount());
-//        BigDecimal updateTo = to.add(transfer.getAmount());
-//
-//        Map<Long, BigDecimal> balanceFrom = new HashMap<>();
-//        balanceFrom.put(transfer.getFromAccount(), updateFrom);
-//
-//        Map<Long, BigDecimal> balanceTo = new HashMap<>();
-//        balanceTo.put(transfer.getToAccount(), updateTo);
-//        TransferRequest t = new TransferRequest();
-//        transferRepository.getBalanceById(1)
-//        transferRepository.saveBalance(balanceTo);
+        String fromAccountNumber = transfer.getFromAccount();
+        String toAccountNumber = transfer.getToAccount();
+        String currency = transfer.getCurrency(); //Потом дописать функционал под валюту
+        BigDecimal amount = transfer.getAmount();
+
+        Transfer fromAccount = transferRepository.findByAccountNumberEquals(fromAccountNumber);
+        Transfer toAccount = transferRepository.findByAccountNumberEquals(toAccountNumber);
+
+        if (fromAccount.getCurrentAmount().compareTo(BigDecimal.ONE) == 1
+        && fromAccount.getCurrentAmount().compareTo(amount) == 1) {
+            fromAccount.setCurrentAmount(fromAccount.getCurrentAmount().subtract(amount));
+
+            transferRepository.save(fromAccount);
+
+            toAccount.setCurrentAmount(toAccount.getCurrentAmount().add(amount));
+
+            transferRepository.save(toAccount);
+        }
+
     }
 
-//    public Transfer add(Integer to_account) {
-//        transferRepository.findById(to_account);
-//        return transferRepository.save(to_account);
-//    }
 }

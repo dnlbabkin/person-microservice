@@ -1,11 +1,14 @@
 package com.example.personmicroservice.bankservice.Entity;
 
+import lombok.Getter;
 import lombok.Setter;
 import lombok.Value;
 
 import javax.persistence.*;
 
-@Value
+@Getter
+@Setter
+@Entity
 @Table(name = "person_account")
 public class PersonAccount {
 
