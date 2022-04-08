@@ -5,32 +5,25 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.security.Timestamp;
 
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "transfer")
-public class Transfer {
+@Table(name = "account_transaction")
+public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("accountNumber")
     @Column(name = "accountnumber")
-    String accountNumber;
+    private String accountNumber;
 
-    @Column(name = "currentcurrency")
-    @JsonProperty("currentCurrency")
-    String currentCurrency;
-
-    @JsonProperty("currentAmount")
-    @Column(name = "currentamount")
-    BigDecimal currentAmount;
+    @Column(name = "transactionamount")
+    private BigDecimal transactionAmount;
 
 }

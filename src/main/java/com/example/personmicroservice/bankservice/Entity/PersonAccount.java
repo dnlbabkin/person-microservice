@@ -1,23 +1,28 @@
 package com.example.personmicroservice.bankservice.Entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Value;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Getter
 @Setter
-@Entity
 @Table(name = "person_account")
 public class PersonAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Long id;
 
     String account;
 
-    @Embedded
-    Income income;
+    String currency;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    BigDecimal amount;
 }

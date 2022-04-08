@@ -1,5 +1,6 @@
 package com.example.personmicroservice.bankservice.Services;
 
+import com.example.personmicroservice.bankoperation.Model.Transfer;
 import com.example.personmicroservice.bankservice.Entity.Person;
 import com.example.personmicroservice.bankservice.Repository.PersonRepository;
 import com.example.personmicroservice.bankservice.Entity.PersonAccount;
@@ -18,10 +19,9 @@ public class PersonAccountService {
     @Autowired
     private PersonRepository personRepository;
 
-    private static final String URL = "http://localhost:8080/person-account/";
+    private static final String URL = "http://localhost:8080/transfer/";
 
     public PersonAccount savePersonAccount(PersonAccount personAccount) {
-
         return personAccountRepository.save(personAccount);
     }
 
@@ -31,13 +31,13 @@ public class PersonAccountService {
 
         Person person = personRepository.findPersonById(personId);
 
-        PersonAccount personAccount = restTemplate
-                .getForObject(URL + person.getId(), PersonAccount.class);
+        Transfer transfer = restTemplate
+                .getForObject(URL + person.getId(), Transfer.class);
 
-        return new PersonInfo(person, personAccount);
+        return new PersonInfo(person, transfer);
     }
 
-    public PersonAccount getAccountById(Integer id) {
+    public PersonAccount getAccountById(Long id) {
         return personAccountRepository.findAccountById(id);
     }
 }

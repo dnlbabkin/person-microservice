@@ -34,11 +34,11 @@ public class PersonAccountController {
                 .getMainIndicatorsVR().getCurrency()
                 .getUSD().getCurs();
 
-        if(account.getIncome().getCurrency().equals("rub")){
+        if(account.getCurrency().equals("rub")){
             personAccountService.savePersonAccount(account);
-        } else if(account.getIncome().getCurrency().equals("usd")) {
-            BigDecimal result = account.getIncome().getAmount().divide(usd, 2, RoundingMode.HALF_UP);
-            account.getIncome().setAmount(result);
+        } else if(account.getCurrency().equals("usd")) {
+            BigDecimal result = account.getAmount().divide(usd, 2, RoundingMode.HALF_UP);
+            account.setAmount(result);
             personAccountService.savePersonAccount(account);
         }
 
@@ -46,7 +46,7 @@ public class PersonAccountController {
     }
 
     @GetMapping("/{id}")
-    public PersonAccount getAccountById(@PathVariable("id") Integer id) {
+    public PersonAccount getAccountById(@PathVariable("id") Long id) {
         return personAccountService.getAccountById(id);
     }
 }
