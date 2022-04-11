@@ -5,7 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.security.Timestamp;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +21,9 @@ public class Transaction {
 
     @Column(name = "accountnumber")
     private String accountNumber;
+
+    @Column(name = "currency")
+    private String currency;
 
     @Column(name = "transactionamount")
     private BigDecimal transactionAmount;

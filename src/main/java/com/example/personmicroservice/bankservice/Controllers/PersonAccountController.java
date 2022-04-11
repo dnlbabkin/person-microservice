@@ -2,8 +2,8 @@ package com.example.personmicroservice.bankservice.Controllers;
 
 import com.example.personmicroservice.Envelope;
 import com.example.personmicroservice.bankservice.Clients.SoapClient;
-import com.example.personmicroservice.bankservice.Services.PersonService;
 import com.example.personmicroservice.bankservice.Entity.PersonAccount;
+import com.example.personmicroservice.bankservice.Services.PersonService;
 import com.example.personmicroservice.bankservice.Services.PersonAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.xml.bind.JAXBException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 @RestController
 @RequestMapping("/person-account")
@@ -26,7 +27,7 @@ public class PersonAccountController {
     private PersonAccountService personAccountService;
 
     @PostMapping(value = "/")
-    public PersonAccount setAccount(@RequestBody PersonAccount account) throws JAXBException {
+    public List<PersonAccount> setAccount(@RequestBody PersonAccount account) throws JAXBException {
         Envelope envelope = soapClient.getData();
 
         BigDecimal usd = envelope.getBody().getAllDataInfoXMLResponse()
@@ -34,15 +35,20 @@ public class PersonAccountController {
                 .getMainIndicatorsVR().getCurrency()
                 .getUSD().getCurs();
 
-        if(account.getCurrency().equals("rub")){
+        if(account.getCurrentCurrency().equals("rub")){
             personAccountService.savePersonAccount(account);
-        } else if(account.getCurrency().equals("usd")) {
-            BigDecimal result = account.getAmount().divide(usd, 2, RoundingMode.HALF_UP);
-            account.setAmount(result);
+        } else if(account.getCurrentCurrency().equals("usd")) {
+            BigDecimal result = account.getCurrentAmount().divide(usd, 2, RoundingMode.HALF_UP);
+            account.setCurrentAmount(result);
             personAccountService.savePersonAccount(account);
         }
 
-        return account;
+        return personAccountService.findAll();
+    }
+
+    @GetMapping("all-accounts")
+    public List<PersonAccount> getAllAccounts(){
+        return personAccountService.findAll();
     }
 
     @GetMapping("/{id}")

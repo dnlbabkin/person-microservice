@@ -36,6 +36,8 @@ public class UpdateDBConfig {
         accountRepository.save(account);
 
         log.info("Finish writing Course: [" + account.getUsd()
-                + "] to Database. Entity[" + account + "]");
+                + "] to Database. Entity[ Id = " + account.getId() + ", USD = "
+        + account.getUsd() + " ]");
+
     }
 }
