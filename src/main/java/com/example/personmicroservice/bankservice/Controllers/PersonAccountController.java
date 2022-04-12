@@ -3,6 +3,7 @@ package com.example.personmicroservice.bankservice.Controllers;
 import com.example.personmicroservice.Envelope;
 import com.example.personmicroservice.bankservice.Clients.SoapClient;
 import com.example.personmicroservice.bankservice.Entity.PersonAccount;
+import com.example.personmicroservice.bankservice.Entity.PersonAccountRequest;
 import com.example.personmicroservice.bankservice.Services.PersonService;
 import com.example.personmicroservice.bankservice.Services.PersonAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class PersonAccountController {
     private PersonAccountService personAccountService;
 
     @PostMapping(value = "/")
-    public List<PersonAccount> setAccount(@RequestBody PersonAccount account) throws JAXBException {
+    public List<PersonAccount> setAccount(@RequestBody PersonAccountRequest account) throws JAXBException {
         Envelope envelope = soapClient.getData();
 
         BigDecimal usd = envelope.getBody().getAllDataInfoXMLResponse()
@@ -35,11 +36,11 @@ public class PersonAccountController {
                 .getMainIndicatorsVR().getCurrency()
                 .getUSD().getCurs();
 
-        if(account.getCurrentCurrency().equals("rub")){
+        if(account.getInitialCurrency().equals("rub")){
             personAccountService.savePersonAccount(account);
-        } else if(account.getCurrentCurrency().equals("usd")) {
-            BigDecimal result = account.getCurrentAmount().divide(usd, 2, RoundingMode.HALF_UP);
-            account.setCurrentAmount(result);
+        } else if(account.getInitialCurrency().equals("usd")) {
+            BigDecimal result = account.getInitialPayment().divide(usd, 2, RoundingMode.HALF_UP);
+            account.setInitialPayment(result);
             personAccountService.savePersonAccount(account);
         }
 
