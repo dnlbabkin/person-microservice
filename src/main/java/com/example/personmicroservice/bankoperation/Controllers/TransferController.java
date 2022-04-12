@@ -33,19 +33,21 @@ public class TransferController {
 
         PersonAccount transfer = new PersonAccount();
 
-        if (transferRequest.getCurrency().equals(transfer.getCurrentAmount())) {
+        if (transferRequest.getCurrency().equals(transfer.getCurrentCurrency())) {
            accountService.sendMoney(transferRequest);
-        } else if (transferRequest.getCurrency().equals("rub")) {
-            BigDecimal resultRub = transferRequest.getAmount().multiply(usd);
-            transfer.setCurrentAmount(resultRub);
-
-            accountService.sendMoney(transferRequest);
-        } else if (transferRequest.getCurrency().equals("usd")) {
-            BigDecimal resultUsd = transferRequest.getAmount().divide(usd, 2, RoundingMode.HALF_UP);
-            transfer.setCurrentAmount(resultUsd);
-
-            accountService.sendMoney(transferRequest);
         }
+
+//        if (transferRequest.getCurrency().equals("rub")) {
+//            BigDecimal resultRub = transferRequest.getAmount().multiply(usd);
+//            transfer.setCurrentAmount(resultRub);
+//
+//            accountService.sendMoney(transferRequest);
+//        } else {
+//            BigDecimal resultUsd = transferRequest.getAmount().divide(usd, 2, RoundingMode.HALF_UP);
+//            transfer.setCurrentAmount(resultUsd);
+//
+//            accountService.sendMoney(transferRequest);
+//        }
 
         return accountService.sendMoney(transferRequest);
     }

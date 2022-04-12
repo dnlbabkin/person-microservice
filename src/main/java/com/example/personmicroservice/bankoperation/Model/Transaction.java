@@ -1,6 +1,5 @@
 package com.example.personmicroservice.bankoperation.Model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,5 +26,4 @@ public class Transaction {
 
     @Column(name = "transactionamount")
     private BigDecimal transactionAmount;
-
 }
