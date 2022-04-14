@@ -10,7 +10,6 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "person")
 public class Person implements Serializable {
 
     @Id

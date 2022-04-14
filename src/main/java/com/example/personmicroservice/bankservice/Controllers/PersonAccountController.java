@@ -47,6 +47,7 @@ public class PersonAccountController {
         return personAccountService.findAll();
     }
 
+
     @GetMapping("all-accounts")
     public List<PersonAccount> getAllAccounts(){
         return personAccountService.findAll();

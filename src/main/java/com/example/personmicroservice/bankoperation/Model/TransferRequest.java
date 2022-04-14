@@ -1,27 +1,21 @@
 package com.example.personmicroservice.bankoperation.Model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Value
 public class TransferRequest {
 
     @JsonProperty("fromAccountNumber")
-    private String fromAccountNumber;
+    String fromAccountNumber;
 
     @JsonProperty("toAccountNumber")
-    private String toAccountNumber;
+    String toAccountNumber;
 
-    private String currency;
+    String currency;
 
-    private BigDecimal amount;
+    BigDecimal amount;
 
 }
