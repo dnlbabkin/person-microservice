@@ -22,18 +22,17 @@ import java.util.Map;
 @Service
 public class SoapClient extends WebServiceGatewaySupport {
 
-    @Autowired
-    private Jaxb2Marshaller marshaller;
-
     private WebServiceTemplate webServiceTemplate;
 
     private RestTemplate template;
 
     private static final String url = "http://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx";
 
-    public Envelope getData () throws JAXBException {
-        template = new RestTemplate();
+    public RestTemplate getTemplate(){
+        return new RestTemplate();
+    }
 
+    public Envelope getData () throws JAXBException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_XML);
         headers.setAccept(Collections.singletonList(MediaType.TEXT_XML));
@@ -51,7 +50,7 @@ public class SoapClient extends WebServiceGatewaySupport {
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity(writer.toString(), headers);
 
-        ResponseEntity<String> response = template
+        ResponseEntity<String> response = getTemplate()
                 .exchange(url, HttpMethod.POST, entity, String.class);
 
         String responseXML = response.getBody();

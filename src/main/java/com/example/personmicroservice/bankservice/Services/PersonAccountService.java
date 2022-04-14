@@ -1,34 +1,40 @@
 package com.example.personmicroservice.bankservice.Services;
 
+import com.example.personmicroservice.Envelope;
 import com.example.personmicroservice.bankservice.Classes.CardNumberGenerator;
-import com.example.personmicroservice.bankservice.Entity.PersonAccountRequest;
+import com.example.personmicroservice.bankservice.Clients.SoapClient;
+import com.example.personmicroservice.bankservice.DTO.PersonAccountRequest;
 import com.example.personmicroservice.bankservice.Repository.PersonAccountRepository;
 import com.example.personmicroservice.bankservice.Entity.PersonAccount;
 import com.example.personmicroservice.bankservice.Entity.Person;
 import com.example.personmicroservice.bankservice.Repository.PersonRepository;
-import com.example.personmicroservice.bankservice.Entity.PersonInfo;
+import com.example.personmicroservice.bankservice.DTO.PersonInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.xml.bind.JAXBException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service
 public class PersonAccountService {
 
-    @Autowired
-    private PersonRepository personRepository;
+    private final PersonRepository personRepository;
+    private final SoapClient soapClient;
+    private final PersonAccountRepository transferRepository;
 
-    private PersonAccountRepository transferRepository;
-
     @Autowired
-    public PersonAccountService(PersonAccountRepository transferRepository) {
+    public PersonAccountService(PersonRepository personRepository, SoapClient soapClient, PersonAccountRepository transferRepository) {
+        this.personRepository = personRepository;
+        this.soapClient = soapClient;
         this.transferRepository = transferRepository;
     }
 
     private static final String URL = "http://localhost:8080/person-account/";
 
-    public PersonAccount savePersonAccount(PersonAccountRequest personAccountRequest) {
+    public PersonAccount savePersonAccount(PersonAccountRequest personAccountRequest) throws JAXBException {
         PersonAccount personAccount = new PersonAccount();
         String masterCard = "2212";
         String number = new CardNumberGenerator().generate(masterCard);
@@ -37,7 +43,20 @@ public class PersonAccountService {
         personAccount.setCurrentCurrency(personAccountRequest.getInitialCurrency());
         personAccount.setCurrentAmount(personAccountRequest.getInitialPayment());
 
-        transferRepository.save(personAccount);
+        Envelope envelope = soapClient.getData();
+
+        BigDecimal usd = envelope.getBody().getAllDataInfoXMLResponse()
+                .getAllDataInfoXMLResult().getAllData()
+                .getMainIndicatorsVR().getCurrency()
+                .getUSD().getCurs();
+
+        if(personAccountRequest.getInitialCurrency().equals("rub")){
+            transferRepository.save(personAccount);
+        } else if(personAccountRequest.getInitialCurrency().equals("usd")) {
+            BigDecimal result = personAccountRequest.getInitialPayment().divide(usd, 2, RoundingMode.HALF_UP);
+            personAccountRequest.setInitialPayment(result);
+            transferRepository.save(personAccount);
+        }
 
         return transferRepository.findByAccountNumberEquals(personAccount.getAccountNumber());
     }

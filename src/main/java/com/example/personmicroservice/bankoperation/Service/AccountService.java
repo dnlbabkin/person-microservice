@@ -1,7 +1,7 @@
 package com.example.personmicroservice.bankoperation.Service;
 
-import com.example.personmicroservice.bankoperation.Model.Transaction;
-import com.example.personmicroservice.bankoperation.Model.TransferRequest;
+import com.example.personmicroservice.bankoperation.Entity.Transaction;
+import com.example.personmicroservice.bankoperation.DTO.TransferRequest;
 
 import javax.xml.bind.JAXBException;
 

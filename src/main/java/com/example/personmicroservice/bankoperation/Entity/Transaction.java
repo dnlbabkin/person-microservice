@@ -1,4 +1,4 @@
-package com.example.personmicroservice.bankoperation.Model;
+package com.example.personmicroservice.bankoperation.Entity;
 
 import lombok.*;
 

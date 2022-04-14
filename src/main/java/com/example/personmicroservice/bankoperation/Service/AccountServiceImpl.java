@@ -1,8 +1,8 @@
 package com.example.personmicroservice.bankoperation.Service;
 
 import com.example.personmicroservice.Envelope;
-import com.example.personmicroservice.bankoperation.Model.Transaction;
-import com.example.personmicroservice.bankoperation.Model.TransferRequest;
+import com.example.personmicroservice.bankoperation.Entity.Transaction;
+import com.example.personmicroservice.bankoperation.DTO.TransferRequest;
 import com.example.personmicroservice.bankoperation.Repositories.TransactionRepository;
 import com.example.personmicroservice.bankservice.Clients.SoapClient;
 import com.example.personmicroservice.bankservice.Entity.PersonAccount;
@@ -17,14 +17,16 @@ import java.math.RoundingMode;
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    @Autowired
-    private PersonAccountRepository accountRepository;
+    private final PersonAccountRepository accountRepository;
+    private final TransactionRepository transactionRepository;
+    private final SoapClient soapClient;
 
     @Autowired
-    TransactionRepository transactionRepository;
-
-    @Autowired
-    SoapClient soapClient;
+    public AccountServiceImpl(PersonAccountRepository accountRepository, TransactionRepository transactionRepository, SoapClient soapClient) {
+        this.accountRepository = accountRepository;
+        this.transactionRepository = transactionRepository;
+        this.soapClient = soapClient;
+    }
 
     @Override
     public Transaction sendMoney(TransferRequest transferRequest) throws JAXBException {
@@ -61,7 +63,17 @@ public class AccountServiceImpl implements AccountService {
             toAccount.setCurrentAmount(toAccount.getCurrentAmount().add(result));
 
             accountRepository.save(toAccount);
+        } else if (!(fromAccount.getCurrentCurrency().equals(toAccount.getCurrentCurrency()))
+                && fromAccount.getCurrentCurrency().equals("usd")) {
+            fromAccount.setCurrentAmount(fromAccount.getCurrentAmount().subtract(amount));
 
+            accountRepository.save(fromAccount);
+
+            BigDecimal result = amount.multiply(usd);
+
+            toAccount.setCurrentAmount(toAccount.getCurrentAmount().add(result));
+
+            accountRepository.save(toAccount);
         }
 
         Transaction transaction = transactionRepository.save(new Transaction(0L, toAccountNumber, currency, amount));

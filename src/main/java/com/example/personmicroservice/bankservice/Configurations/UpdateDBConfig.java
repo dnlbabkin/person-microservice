@@ -19,11 +19,14 @@ import java.math.BigDecimal;
 @Configuration
 public class UpdateDBConfig {
 
-    @Autowired
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
+    private final SoapClient soapClient;
 
     @Autowired
-    private SoapClient soapClient;
+    public UpdateDBConfig(AccountRepository accountRepository, SoapClient soapClient) {
+        this.accountRepository = accountRepository;
+        this.soapClient = soapClient;
+    }
 
     @Scheduled(fixedRateString = "${sample.schedule.string}", initialDelayString = "${initialdelay.string}")
     public void updateDataBase() throws JAXBException {

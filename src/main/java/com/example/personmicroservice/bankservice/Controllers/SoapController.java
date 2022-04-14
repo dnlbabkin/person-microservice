@@ -9,15 +9,19 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.bind.JAXBException;
+import java.math.BigDecimal;
 
 @RestController
 public class SoapController {
 
-    @Autowired
-    private SoapClient soapClient;
+    private final SoapClient soapClient;
+    private final AccountService accountService;
 
     @Autowired
-    private AccountService accountService;
+    public SoapController(SoapClient soapClient, AccountService accountService) {
+        this.soapClient = soapClient;
+        this.accountService = accountService;
+    }
 
     @PostMapping(value = "/account", produces = {MediaType.APPLICATION_XML_VALUE})
     public Envelope invokeSoapClient() throws JAXBException {
@@ -29,20 +33,9 @@ public class SoapController {
     }
 
     @GetMapping(value = "/account/USD/", produces = {MediaType.APPLICATION_XML_VALUE})
-    public String getUSD() throws JAXBException {
-        Envelope envelope = soapClient.getData();
-
+    public Account getUSD() throws JAXBException {
         Account account = new Account();
-        account.setUsd(envelope.getBody().getAllDataInfoXMLResponse()
-                .getAllDataInfoXMLResult().getAllData()
-                .getMainIndicatorsVR().getCurrency()
-                .getUSD().getCurs());
 
-        accountService.saveUSD(account);
-
-        return "Курс доллара состовляет: " + envelope.getBody().getAllDataInfoXMLResponse()
-                .getAllDataInfoXMLResult().getAllData()
-                .getMainIndicatorsVR().getCurrency()
-                .getUSD().getCurs() + " рублей";
+        return accountService.saveUSD(account);
     }
 }
