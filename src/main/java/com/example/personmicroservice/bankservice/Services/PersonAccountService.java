@@ -40,14 +40,12 @@ public class PersonAccountService {
     @Value("${personaccount.url}")
     private String url;
 
+    @Value("${card.number.id}")
+    private String cardNumberId;
+
     public PersonAccount savePersonAccount(PersonAccountRequest personAccountRequest) throws JAXBException {
         PersonAccount personAccount = new PersonAccount();
-        String masterCard = "2212";
-        String number = new CardNumberGenerator().generate(masterCard);
-
-        personAccount.setAccountNumber(number);
-        personAccount.setCurrentCurrency(personAccountRequest.getInitialCurrency());
-        personAccount.setCurrentAmount(personAccountRequest.getInitialPayment());
+        String number = new CardNumberGenerator().generate(cardNumberId);
 
         Envelope envelope = soapClient.getData();
 
@@ -57,10 +55,18 @@ public class PersonAccountService {
                 .getUSD().getCurs();
 
         if(personAccountRequest.getInitialCurrency().equals("rub")){
+            personAccount.setAccountNumber(number);
+            personAccount.setCurrentCurrency(personAccountRequest.getInitialCurrency());
+            personAccount.setCurrentAmount(personAccountRequest.getInitialPayment());
+
             transferRepository.save(personAccount);
         } else if(personAccountRequest.getInitialCurrency().equals("usd")) {
+            personAccount.setAccountNumber(number);
+            personAccount.setCurrentCurrency(personAccountRequest.getInitialCurrency());
+            personAccount.setCurrentAmount(personAccountRequest.getInitialPayment());
+
             BigDecimal result = personAccountRequest.getInitialPayment().divide(usd, 2, RoundingMode.HALF_UP);
-            personAccountRequest.setInitialPayment(result);
+            personAccount.setCurrentAmount(result);
             transferRepository.save(personAccount);
         }
 
