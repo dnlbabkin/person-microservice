@@ -1,13 +1,11 @@
 package com.example.personmicroservice.bankservice.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Value;
 
 import java.math.BigDecimal;
 
-@Setter
-@Getter
+@Value
 public class PersonAccountRequest {
 
     @JsonProperty("initialCurrency")
