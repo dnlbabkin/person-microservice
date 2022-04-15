@@ -10,6 +10,7 @@ import com.example.personmicroservice.bankservice.Entity.Person;
 import com.example.personmicroservice.bankservice.Repository.PersonRepository;
 import com.example.personmicroservice.bankservice.DTO.PersonInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,7 +33,12 @@ public class PersonAccountService {
         this.transferRepository = transferRepository;
     }
 
-    private static final String URL = "http://localhost:8080/person-account/";
+    public RestTemplate getTemplate(){
+        return new RestTemplate();
+    }
+
+    @Value("${personaccount.url}")
+    private String url;
 
     public PersonAccount savePersonAccount(PersonAccountRequest personAccountRequest) throws JAXBException {
         PersonAccount personAccount = new PersonAccount();
@@ -66,13 +72,10 @@ public class PersonAccountService {
     }
 
     public PersonInfo getPersonAccount(Integer personId) {
-        RestTemplate restTemplate = new RestTemplate();
-
-
         Person person = personRepository.findPersonById(personId);
 
-        PersonAccount transfer = restTemplate
-                .getForObject(URL + person.getId(), PersonAccount.class);
+        PersonAccount transfer = getTemplate()
+                .getForObject(url + person.getId(), PersonAccount.class);
 
         return new PersonInfo(person, transfer);
     }

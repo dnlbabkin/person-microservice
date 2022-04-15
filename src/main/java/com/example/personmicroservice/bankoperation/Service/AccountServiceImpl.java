@@ -46,33 +46,22 @@ public class AccountServiceImpl implements AccountService {
 
         if (fromAccount.getCurrentCurrency().equals(toAccount.getCurrentCurrency())) {
             fromAccount.setCurrentAmount(fromAccount.getCurrentAmount().subtract(amount));
-
             accountRepository.save(fromAccount);
-
             toAccount.setCurrentAmount(toAccount.getCurrentAmount().add(amount));
-
             accountRepository.save(toAccount);
         } else if (!(fromAccount.getCurrentCurrency().equals(toAccount.getCurrentCurrency()))
                 && fromAccount.getCurrentCurrency().equals("rub")) {
             fromAccount.setCurrentAmount(fromAccount.getCurrentAmount().subtract(amount));
-
             accountRepository.save(fromAccount);
-
             BigDecimal result = amount.divide(usd, 2, RoundingMode.HALF_UP);
-
             toAccount.setCurrentAmount(toAccount.getCurrentAmount().add(result));
-
             accountRepository.save(toAccount);
         } else if (!(fromAccount.getCurrentCurrency().equals(toAccount.getCurrentCurrency()))
                 && fromAccount.getCurrentCurrency().equals("usd")) {
             fromAccount.setCurrentAmount(fromAccount.getCurrentAmount().subtract(amount));
-
             accountRepository.save(fromAccount);
-
             BigDecimal result = amount.multiply(usd);
-
             toAccount.setCurrentAmount(toAccount.getCurrentAmount().add(result));
-
             accountRepository.save(toAccount);
         }
 

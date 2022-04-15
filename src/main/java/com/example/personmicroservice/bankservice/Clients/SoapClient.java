@@ -2,9 +2,10 @@ package com.example.personmicroservice.bankservice.Clients;
 
 import com.example.personmicroservice.AllDataInfoXML;
 import com.example.personmicroservice.Envelope;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.*;
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
@@ -26,7 +27,8 @@ public class SoapClient extends WebServiceGatewaySupport {
 
     private RestTemplate template;
 
-    private static final String url = "http://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx";
+    @Value("${cbr.url}")
+    private String url;
 
     public RestTemplate getTemplate(){
         return new RestTemplate();
