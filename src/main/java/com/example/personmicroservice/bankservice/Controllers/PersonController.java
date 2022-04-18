@@ -2,19 +2,17 @@ package com.example.personmicroservice.bankservice.Controllers;
 
 import com.example.personmicroservice.bankservice.Entity.Person;
 import com.example.personmicroservice.bankservice.Services.PersonService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/persons")
+@RequiredArgsConstructor
 public class PersonController {
 
     private final PersonService personService;
 
-    @Autowired
-    public PersonController(PersonService personService) {
-        this.personService = personService;
-    }
 
     @PostMapping("/")
     public Person savePerson(@RequestBody Person person) {

@@ -3,6 +3,7 @@ package com.example.personmicroservice.bankservice.Controllers;
 import com.example.personmicroservice.bankservice.Entity.PersonAccount;
 import com.example.personmicroservice.bankservice.DTO.PersonAccountRequest;
 import com.example.personmicroservice.bankservice.Services.PersonAccountService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,14 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/person-account")
+@RequiredArgsConstructor
 public class PersonAccountController {
 
     private final PersonAccountService personAccountService;
 
-    @Autowired
-    public PersonAccountController(PersonAccountService personAccountService) {
-        this.personAccountService = personAccountService;
-    }
 
     @PostMapping(value = "/")
     public List<PersonAccount> setAccount(@RequestBody PersonAccountRequest account) throws JAXBException {

@@ -1,15 +1,15 @@
 package com.example.personmicroservice.bankservice.Services;
 
-import com.example.personmicroservice.Envelope;
+import com.example.personmicroservice.AllData;
 import com.example.personmicroservice.bankservice.Classes.CardNumberGenerator;
-import com.example.personmicroservice.bankservice.Clients.SoapClient;
+import com.example.personmicroservice.bankservice.Clients.CBRClient;
 import com.example.personmicroservice.bankservice.DTO.PersonAccountRequest;
 import com.example.personmicroservice.bankservice.Repository.PersonAccountRepository;
 import com.example.personmicroservice.bankservice.Entity.PersonAccount;
 import com.example.personmicroservice.bankservice.Entity.Person;
 import com.example.personmicroservice.bankservice.Repository.PersonRepository;
 import com.example.personmicroservice.bankservice.DTO.PersonInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,22 +20,13 @@ import java.math.RoundingMode;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PersonAccountService {
 
     private final PersonRepository personRepository;
-    private final SoapClient soapClient;
+    private final CBRClient soapClient;
     private final PersonAccountRepository transferRepository;
-
-    @Autowired
-    public PersonAccountService(PersonRepository personRepository, SoapClient soapClient, PersonAccountRepository transferRepository) {
-        this.personRepository = personRepository;
-        this.soapClient = soapClient;
-        this.transferRepository = transferRepository;
-    }
-
-    public RestTemplate getTemplate(){
-        return new RestTemplate();
-    }
+    private final RestTemplate template;
 
     @Value("${personaccount.url}")
     private String url;
@@ -47,20 +38,17 @@ public class PersonAccountService {
         PersonAccount personAccount = new PersonAccount();
         String number = new CardNumberGenerator().generate(cardNumberId);
 
-        Envelope envelope = soapClient.getData();
+        AllData.MainIndicatorsVR envelope = soapClient.getData();
 
-        BigDecimal usd = envelope.getBody().getAllDataInfoXMLResponse()
-                .getAllDataInfoXMLResult().getAllData()
-                .getMainIndicatorsVR().getCurrency()
-                .getUSD().getCurs();
+        BigDecimal usd = envelope.getCurrency().getUSD().getCurs();
 
-        if(personAccountRequest.getInitialCurrency().equals("rub")){
+        if (personAccountRequest.getInitialCurrency().equals("rub")) {
             personAccount.setAccountNumber(number);
             personAccount.setCurrentCurrency(personAccountRequest.getInitialCurrency());
             personAccount.setCurrentAmount(personAccountRequest.getInitialPayment());
 
             transferRepository.save(personAccount);
-        } else if(personAccountRequest.getInitialCurrency().equals("usd")) {
+        } else if (personAccountRequest.getInitialCurrency().equals("usd")) {
             personAccount.setAccountNumber(number);
             personAccount.setCurrentCurrency(personAccountRequest.getInitialCurrency());
             personAccount.setCurrentAmount(personAccountRequest.getInitialPayment());
@@ -80,7 +68,7 @@ public class PersonAccountService {
     public PersonInfo getPersonAccount(Integer personId) {
         Person person = personRepository.findPersonById(personId);
 
-        PersonAccount transfer = getTemplate()
+        PersonAccount transfer = template
                 .getForObject(url + person.getId(), PersonAccount.class);
 
         return new PersonInfo(person, transfer);

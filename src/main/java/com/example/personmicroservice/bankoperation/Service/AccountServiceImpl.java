@@ -1,13 +1,15 @@
 package com.example.personmicroservice.bankoperation.Service;
 
-import com.example.personmicroservice.Envelope;
-import com.example.personmicroservice.bankoperation.Entity.Transaction;
+import com.example.personmicroservice.AllData;
+import com.example.personmicroservice.CurrencyEnum;
 import com.example.personmicroservice.bankoperation.DTO.TransferRequest;
+import com.example.personmicroservice.bankoperation.Entity.Transaction;
 import com.example.personmicroservice.bankoperation.Repositories.TransactionRepository;
-import com.example.personmicroservice.bankservice.Clients.SoapClient;
+import com.example.personmicroservice.bankservice.Clients.CBRClient;
 import com.example.personmicroservice.bankservice.Entity.PersonAccount;
 import com.example.personmicroservice.bankservice.Repository.PersonAccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.google.common.base.Function;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.JAXBException;
@@ -15,18 +17,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Service
+@RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
     private final PersonAccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
-    private final SoapClient soapClient;
-
-    @Autowired
-    public AccountServiceImpl(PersonAccountRepository accountRepository, TransactionRepository transactionRepository, SoapClient soapClient) {
-        this.accountRepository = accountRepository;
-        this.transactionRepository = transactionRepository;
-        this.soapClient = soapClient;
-    }
+    private final CBRClient soapClient;
 
     @Override
     public Transaction sendMoney(TransferRequest transferRequest) throws JAXBException {
@@ -37,36 +33,38 @@ public class AccountServiceImpl implements AccountService {
 
         PersonAccount fromAccount = accountRepository.findByAccountNumberEquals(fromAccountNumber);
         PersonAccount toAccount = accountRepository.findByAccountNumberEquals(toAccountNumber);
+        AllData.MainIndicatorsVR.Currency currencyUsdRub = soapClient.getData().getCurrency();
 
-        Envelope envelope = soapClient.getData();
+//        BigDecimal currencyUsdRub = soapClient.getData().getCurrency().getUSD().getCurs();
 
-        BigDecimal usd = envelope.getBody().getAllDataInfoXMLResponse()
-                .getAllDataInfoXMLResult().getAllData().getMainIndicatorsVR()
-                .getCurrency().getUSD().getCurs();
-
-        if (fromAccount.getCurrentCurrency().equals(toAccount.getCurrentCurrency())) {
-            fromAccount.setCurrentAmount(fromAccount.getCurrentAmount().subtract(amount));
-            accountRepository.save(fromAccount);
-            toAccount.setCurrentAmount(toAccount.getCurrentAmount().add(amount));
-            accountRepository.save(toAccount);
-        } else if (!(fromAccount.getCurrentCurrency().equals(toAccount.getCurrentCurrency()))
-                && fromAccount.getCurrentCurrency().equals("rub")) {
-            fromAccount.setCurrentAmount(fromAccount.getCurrentAmount().subtract(amount));
-            accountRepository.save(fromAccount);
-            BigDecimal result = amount.divide(usd, 2, RoundingMode.HALF_UP);
-            toAccount.setCurrentAmount(toAccount.getCurrentAmount().add(result));
-            accountRepository.save(toAccount);
-        } else if (!(fromAccount.getCurrentCurrency().equals(toAccount.getCurrentCurrency()))
-                && fromAccount.getCurrentCurrency().equals("usd")) {
-            fromAccount.setCurrentAmount(fromAccount.getCurrentAmount().subtract(amount));
-            accountRepository.save(fromAccount);
-            BigDecimal result = amount.multiply(usd);
-            toAccount.setCurrentAmount(toAccount.getCurrentAmount().add(result));
-            accountRepository.save(toAccount);
-        }
+        fromAccount.setCurrentAmount(fromAccount.getCurrentAmount().subtract(amount));
+        accountRepository.save(fromAccount);
+        BigDecimal result = convertCurrency(amount, fromAccount, toAccount, currencyUsdRub);
+        toAccount.setCurrentAmount(toAccount.getCurrentAmount().add(result));
+        accountRepository.save(toAccount);
 
         Transaction transaction = transactionRepository.save(new Transaction(0L, toAccountNumber, currency, amount));
 
         return transaction;
+    }
+
+    private BigDecimal convertCurrency(BigDecimal amount, PersonAccount fromAccount, PersonAccount toAccount, AllData.MainIndicatorsVR.Currency  cur) {
+        Function<AllData.MainIndicatorsVR.Currency, BigDecimal> exchangeFunction = CurrencyEnum.fromAbbreviation(fromAccount.getCurrentCurrency()).getExchangeFunction();
+        BigDecimal currencyUsdRub123 = exchangeFunction.apply(cur);
+
+
+        boolean isCurrencyEquals = fromAccount.getCurrentCurrency().equals(toAccount.getCurrentCurrency());
+        BigDecimal result;
+        if (isCurrencyEquals) {
+            result = amount;
+        } else if (fromAccount.getCurrentCurrency().equals("rub")) {
+            result = amount.divide(currencyUsdRub123, 2, RoundingMode.HALF_UP);
+        } else if (fromAccount.getCurrentCurrency().equals("usb")) {
+            result = amount.multiply(currencyUsdRub123);
+        } else {
+            throw new RuntimeException("currency is unknown");
+        }
+
+        return result;
     }
 }
